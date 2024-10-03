@@ -15,13 +15,15 @@ using OrchardCore.Recipes;
 using OrchardCore.ResourceManagement;
 using OrchardCore.Security.Permissions;
 
+
+
 namespace OrchardCore.Facebook;
 
 public sealed class Startup : StartupBase
 {
     public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
     {
-        builder.UseMiddleware<ScriptsMiddleware>();
+        routes.GetEndPoint();
     }
 
     public override void ConfigureServices(IServiceCollection services)

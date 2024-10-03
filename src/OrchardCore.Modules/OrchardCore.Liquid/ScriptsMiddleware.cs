@@ -23,6 +23,7 @@ public class ScriptsMiddleware
 
     public async Task Invoke(HttpContext httpContext)
     {
+        //if the request endpoint is liquid scripts
         if (httpContext.Request.Path.StartsWithSegments("/OrchardCore.Liquid/Scripts", StringComparison.OrdinalIgnoreCase))
         {
             if (Path.GetFileName(httpContext.Request.Path.Value) == "liquid-intellisense.js")

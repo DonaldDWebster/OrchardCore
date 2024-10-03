@@ -24,7 +24,7 @@ public class ScriptsMiddleware
         if (httpContext.Request.Path.StartsWithSegments("/OrchardCore.Facebook/sdk", StringComparison.OrdinalIgnoreCase))
         {
             var script = default(string);
-            var settings = await _siteService.GetSettingsAsync<FacebookSettings>();
+            FacebookSettings settings = await _siteService.GetSettingsAsync<FacebookSettings>();
 
             if (Path.GetFileName(httpContext.Request.Path.Value) == "fbsdk.js")
             {

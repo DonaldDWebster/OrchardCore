@@ -39,7 +39,9 @@ public static class CreateEndpoint
         HttpContext httpContext,
         bool draft = false)
     {
-        if (!await authorizationService.AuthorizeAsync(httpContext.User, CommonPermissions.AccessContentApi))
+        var canUserAccessAPi =
+            await authorizationService.AuthorizeAsync(httpContext.User, CommonPermissions.AccessContentApi);
+        if (!canUserAccessAPi)
         {
             return httpContext.ChallengeOrForbid("Api");
         }
@@ -54,13 +56,14 @@ public static class CreateEndpoint
 
         if (contentItem == null)
         {
-            if (string.IsNullOrEmpty(model?.ContentType) || await contentDefinitionManager.GetTypeDefinitionAsync(model.ContentType) == null)
+            var isModelOrContentNull = string.IsNullOrEmpty(model?.ContentType) || await contentDefinitionManager.GetTypeDefinitionAsync(model.ContentType) == null;
+            if (isModelOrContentNull)
             {
                 return TypedResults.BadRequest();
             }
 
-            contentItem = await contentManager.NewAsync(model.ContentType);
-            contentItem.Owner = httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            contentItem = await contentManager.NewAsync(model.ContentType); //get the contennt item for this type? idk
+            contentItem.Owner = httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier); //find the owner o
 
             if (!await authorizationService.AuthorizeAsync(httpContext.User, CommonPermissions.PublishContent, contentItem))
             {
